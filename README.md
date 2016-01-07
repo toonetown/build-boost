@@ -12,9 +12,9 @@ These build scripts are meant to be run under most development environments as l
 
 To build on OS X:
 
- * OS X 10.10 (Yosemite)
+ * OS X 10.11 (El Capitan)
  
- * Xcode 6.4 (From Mac App Store)
+ * Xcode 7.2 (From Mac App Store)
      * Run Xcode and accept all first-run prompts
 
 To build on Windows:
