@@ -1,4 +1,5 @@
 #!/bin/bash
+
 cat << EOF > "${PATH_TO_BOOST_DIST}/project-config.jam"
 using gcc :
   : ${ANDROID_NDK_HOME}/toolchains/${GCC_ARCH}-${ANDROID_GCC_VERSION}/prebuilt/darwin-x86_64/bin/${GCC_PREFIX}-g++

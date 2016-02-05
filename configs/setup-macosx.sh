@@ -9,5 +9,3 @@ CLANG_PATH="$(xcrun -f clang++)"
 SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
 SDK_VERSION_NAME="macosx"
 MIN_OS_VERSION="${MIN_OS_VERSION:-10.8}"
-
-return 0

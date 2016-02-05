@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cat << EOF > "${PATH_TO_BOOST_DIST}/project-config.jam"
 using clang-darwin : : ${CLANG_PATH}
   : <compileflags>-arch <compileflags>${ARCH}

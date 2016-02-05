@@ -7,5 +7,3 @@ GCC_PREFIX="i686-linux-android"
 CXX_STL_ARCH="x86"
 PLATFORM_ARCH="x86"
 JAM_FLAGS=""
-
-return 0
