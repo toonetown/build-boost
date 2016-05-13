@@ -14,7 +14,7 @@ To build on OS X:
 
  * OS X 10.11 (El Capitan)
  
- * Xcode 7.2 (From Mac App Store)
+ * Xcode 7.3 (From Mac App Store)
      * Run Xcode and accept all first-run prompts
 
 To build on Windows:
