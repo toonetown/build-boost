@@ -5,7 +5,7 @@ BUILD_DIR="$(pwd)"
 cd ->/dev/null
 
 # Homebrew bootstrapping information
-: ${HB_BOOTSTRAP_GIST_URL:="https://gist.githubusercontent.com/toonetown/48101686e509fda81335/raw/e848deeed4007b7efd87435d048de3031d40f934/homebrew-bootstrap.sh"}
+: ${HB_BOOTSTRAP_GIST_URL:="https://gist.githubusercontent.com/toonetown/48101686e509fda81335/raw"}
 HB_BOOTSTRAP="b:boost-build"
 HB_BOOTSTRAP_ANDROID="t:*toonetown/android b:android-ndk
                       t:toonetown/extras b:toonetown-extras s:toonetown-extras b:android-env"
