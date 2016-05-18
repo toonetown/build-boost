@@ -5,31 +5,30 @@ BUILD_DIR="$(pwd)"
 cd ->/dev/null
 
 # Homebrew bootstrapping information
-HB_BOOTSTRAP_GIST_URL="${HB_BOOTSTRAP_GIST_URL:=https://gist.githubusercontent.com/toonetown/48101686e509fda81335/raw/fbb7797450a3314dcf54d24dbef223988b23e35f/homebrew-bootstrap.sh}"
+: ${HB_BOOTSTRAP_GIST_URL:="https://gist.githubusercontent.com/toonetown/48101686e509fda81335/raw/e848deeed4007b7efd87435d048de3031d40f934/homebrew-bootstrap.sh"}
 HB_BOOTSTRAP="b:boost-build"
 HB_BOOTSTRAP_ANDROID="t:*toonetown/android b:android-ndk
                       t:toonetown/extras b:toonetown-extras s:toonetown-extras b:android-env"
 
 # Overridable build locations
-DEFAULT_BOOST_DIST="${DEFAULT_BOOST_DIST:=${BUILD_DIR}/boost}"
-BOOST_OBJDIR_ROOT="${BOOST_OBJDIR_ROOT:=${BUILD_DIR}/target}"
-CONFIGS_DIR="${CONFIGS_DIR:=${BUILD_DIR}/configs}"
-BJAM_BIN="${BJAM_BIN:=$(which bjam || echo "${BUILD_DIR}/target/bjam")}"
+: ${DEFAULT_BOOST_DIST:="${BUILD_DIR}/boost"}
+: ${BOOST_OBJDIR_ROOT:="${BUILD_DIR}/target"}
+: ${CONFIGS_DIR:="${BUILD_DIR}/configs"}
+: ${BJAM_BIN:="$(which bjam || echo "${BUILD_DIR}/target/bjam")"}
 
 # Options to control the build
-BOOST_BUILD_LOG_LEVEL="${BOOST_BUILD_LOG_LEVEL:=1}"
-BOOST_BUILD_PARALLEL="${BOOST_BUILD_PARALLEL:=$(sysctl -n hw.ncpu)}"
-BOOST_BUILD_LAYOUT="${BOOST_BUILD_LAYOUT:=system}"
-BOOST_BUILD_SKIPPED_LIBS="${BOOST_BUILD_SKIPPED_LIBS:=--without-mpi --without-graph_parallel}"
-BOOST_BUILD_LINK="${BOOST_BUILD_LINK:=static}"
-BOOST_BUILD_THREADING="${BOOST_BUILD_THREADING:=multi}"
-BOOST_BUILD_OPTIMIZATION="${BOOST_BUILD_OPTIMIZATION:=space}"
-BOOST_BUILD_INLINING="${BOOST_BUILD_INLINING:=on}"
-BOOST_BUILD_OPTIONS="${BOOST_BUILD_OPTIONS:=link=${BOOST_BUILD_LINK}                    \
-                                            threading=${BOOST_BUILD_THREADING}          \
-                                            optimization=${BOOST_BUILD_OPTIMIZATION}    \
-                                            inlining=${BOOST_BUILD_INLINING}}"
-
+: ${BOOST_BUILD_LOG_LEVEL:=1}
+: ${BOOST_BUILD_PARALLEL:="$(sysctl -n hw.ncpu)"}
+: ${BOOST_BUILD_LAYOUT:="system"}
+: ${BOOST_BUILD_SKIPPED_LIBS:="--without-mpi --without-graph_parallel"}
+: ${BOOST_BUILD_LINK:="static"}
+: ${BOOST_BUILD_THREADING:="multi"}
+: ${BOOST_BUILD_OPTIMIZATION:="space"}
+: ${BOOST_BUILD_INLINING:="on"}
+: ${BOOST_BUILD_OPTIONS:="link=${BOOST_BUILD_LINK}                    \
+                          threading=${BOOST_BUILD_THREADING}          \
+                          optimization=${BOOST_BUILD_OPTIMIZATION}    \
+                          inlining=${BOOST_BUILD_INLINING}"}
 
 list_arch() {
     if [ -z "${1}" ]; then
