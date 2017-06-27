@@ -10,7 +10,12 @@ IF "%CONFIGS_DIR%"=="" SET CONFIGS_DIR=%BUILD_DIR%\configs
 IF "%BJAM_BIN%"=="" SET BJAM_BIN=%BUILD_DIR%\target\bjam.exe
 
 :: Options to control the build
-IF "%BOOST_BUILD_TOOLSET%"=="" SET BOOST_BUILD_TOOLSET=msvc
+IF "%BOOST_BUILD_TOOLSET%"=="" (
+  SET BOOST_BUILD_TOOLSET=msvc
+  SET BOOST_BUILD_PLATFORM_NAME=windows
+) ELSE (
+  SET BOOST_BUILD_PLATFORM_NAME=windows-%BOOST_BUILD_TOOLSET%
+)
 IF "%BOOST_BUILD_LOG_LEVEL%"=="" SET BOOST_BUILD_LOG_LEVEL=1
 IF "%BOOST_BUILD_PARALLEL%"=="" SET BOOST_BUILD_PARALLEL=%NUMBER_OF_PROCESSORS%
 IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=tagged
@@ -187,7 +192,7 @@ exit /B 0
         CALL :do_headers || (
             POPD & exit /B 1
         )
-        CALL :get_bjam windows.%~1 || (
+        CALL :get_bjam %BOOST_BUILD_PLATFORM_NAME%.%~1 || (
             POPD & exit /B 1
         )
         
@@ -215,7 +220,7 @@ exit /B 0
     ) ELSE (
         echo Cleaning up %~1 builds in "%BOOST_OBJDIR_ROOT%"...
         rmdir /Q /S "%BOOST_OBJDIR_ROOT%\objdir-%~1" 2>NUL
-        rmdir /Q /S "%BOOST_OBJDIR_ROOT%\objdir-windows.%~1" 2>NUL
+        rmdir /Q /S "%BOOST_OBJDIR_ROOT%\objdir-%BOOST_BUILD_PLATFORM_NAME%.%~1" 2>NUL
         IF "%~1"=="headers" SET CLEAN_HEADERS=yes
     )
 
