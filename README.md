@@ -21,9 +21,8 @@ To build on Windows:
 
  * Windows 10
  
- * Visual Studio 2017
+ * Visual Studio 2017 (or 2015)
      * Make sure and install `Programming Languages | Visual C++ | Common Tools for Visual C++ 2017` as well
-     * Can build for VS2015 within VS2017 by installing the 2015 Windows SDK and building with the `SET BOOST_BUILD_TOOLSET=msvc-14.0` environment set.
 
 To build for Android:
 
