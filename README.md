@@ -10,11 +10,11 @@ You can check this directory out in any location on your computer, but the defau
 
 These build scripts are meant to be run under most development environments as long as the build tools (Xcode or Visual Studio) are installed.  However, the scripts are tested with the following configurations:
 
-To build on OS X:
+To build on macOS:
 
- * OS X 10.11 (El Capitan)
+ * macOS 10.12 (Sierra)
  
- * Xcode 7.3 (From Mac App Store)
+ * Xcode 8.3 (From Mac App Store)
      * Run Xcode and accept all first-run prompts
 
 To build on Windows:
@@ -24,13 +24,21 @@ To build on Windows:
  * Visual Studio 2015
      * Make sure and install `Programming Languages | Visual C++ | Common Tools for Visual C++ 2015` as well
 
+To build for Android:
+
+ * macOS requirements above
+ 
+ * Android NDK r15b
+     * You must set the environment variable `ANDROID_NDK_HOME` to point to your NDK installation
+
+
 ##### Steps (Bootstrap script) #####
 
 The `build.sh` (or `build.bat` on Windows) script accepts a "bootstrap" argument which will build the bjam executable for use in performing the build.  It can be run multiple times safely.
 
     ./build.sh bootstrap
 
-You can optionally pass "brew" to `build.sh` on OS X to use a prebuilt bjam executable
+You can optionally pass "brew" to `build.sh` on macOS to use a prebuilt bjam executable
 
     ./build.sh bootstrap brew
 
