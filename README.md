@@ -23,6 +23,7 @@ To build on Windows:
  
  * Visual Studio 2017 (or 2015)
      * Make sure and install `Programming Languages | Visual C++ | Common Tools for Visual C++ 2017` as well
+     * If you have both 2017 and 2015 installed, you can select to build for 2015 by setting `SET BOOST_BUILD_TOOLSET=msvc-14.0` prior to running the `build.bat` file.
 
 To build for Android:
 
