@@ -113,7 +113,7 @@ do_bootstrap() {
 get_bjam() {
     echo -n "${BJAM_BIN} -d${BOOST_BUILD_LOG_LEVEL} -j${BOOST_BUILD_PARALLEL} -q"
     echo -n " --layout=${BOOST_BUILD_LAYOUT}"
-    echo -n " --abbreviate-paths"
+    echo -n " --hash"
     echo -n " --build-dir=\"${BOOST_OBJDIR_ROOT}/objdir-${1}\""
     echo -n " --stagedir=\"${BOOST_OBJDIR_ROOT}/objdir-${1}\""
     echo -n " --includedir=\"${BOOST_OBJDIR_ROOT}/include\""

@@ -134,7 +134,7 @@ exit /B 0
     @ECHO OFF
     SET BJAM="%BJAM_BIN%" -d%BOOST_BUILD_LOG_LEVEL% -j%BOOST_BUILD_PARALLEL% -q
     SET BJAM=%BJAM% --layout=%BOOST_BUILD_LAYOUT%
-    SET BJAM=%BJAM% --abbreviate-paths
+    SET BJAM=%BJAM% --hash
     SET BJAM=%BJAM% --build-dir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
     SET BJAM=%BJAM% --stagedir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
     SET BJAM=%BJAM% --includedir="%BOOST_OBJDIR_ROOT%\include"
