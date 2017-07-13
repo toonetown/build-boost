@@ -21,7 +21,7 @@ IF "%MSVC_VERSION%"=="" (
 :: Options to control the build
 IF "%BOOST_BUILD_LOG_LEVEL%"=="" SET BOOST_BUILD_LOG_LEVEL=1
 IF "%BOOST_BUILD_PARALLEL%"=="" SET BOOST_BUILD_PARALLEL=%NUMBER_OF_PROCESSORS%
-IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=tagged
+IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=system
 IF "%BOOST_BUILD_SKIPPED_LIBS%"=="" SET BOOST_BUILD_SKIPPED_LIBS=--without-mpi --without-graph_parallel --without-python
 IF "%BOOST_BUILD_LINK%"=="" SET BOOST_BUILD_LINK=static
 IF "%BOOST_BUILD_RUNTIME_LINK%"=="" SET BOOST_BUILD_RUNTIME_LINK=static
@@ -195,8 +195,17 @@ exit /B 0
             POPD & exit /B 1
         )
         
-        !BJAM! !OPTS! !BOOST_BUILD_OPTIONS! || (
-            POPD & exit /B 1
+        IF "%BOOST_BUILD_LAYOUT%"=="system" (
+            !BJAM! !OPTS! variant=release !BOOST_BUILD_OPTIONS! || (
+                POPD & exit /B 1
+            )        
+            !BJAM! --buildid=dbg !OPTS! variant=debug !BOOST_BUILD_OPTIONS! || (
+                POPD & exit /B 1
+            )                    
+        ) ELSE (
+            !BJAM! !OPTS! !BOOST_BUILD_OPTIONS! || (
+                POPD & exit /B 1
+            )        
         )
         POPD
     ) ELSE (
