@@ -26,13 +26,9 @@ IF "%BOOST_BUILD_SKIPPED_LIBS%"=="" SET BOOST_BUILD_SKIPPED_LIBS=--without-mpi -
 IF "%BOOST_BUILD_LINK%"=="" SET BOOST_BUILD_LINK=static
 IF "%BOOST_BUILD_RUNTIME_LINK%"=="" SET BOOST_BUILD_RUNTIME_LINK=static
 IF "%BOOST_BUILD_THREADING%"=="" SET BOOST_BUILD_THREADING=multi
-IF "%BOOST_BUILD_OPTIMIZATION%"=="" SET BOOST_BUILD_OPTIMIZATION=space
-IF "%BOOST_BUILD_INLINING%"=="" SET BOOST_BUILD_INLINING=on
 IF "%BOOST_BUILD_OPTIONS%"=="" SET BOOST_BUILD_OPTIONS=link=%BOOST_BUILD_LINK% ^
                                                        runtime-link=%BOOST_BUILD_RUNTIME_LINK% ^
-                                                       threading=%BOOST_BUILD_THREADING% ^
-                                                       optimization=%BOOST_BUILD_OPTIMIZATION% ^
-                                                       inlining=%BOOST_BUILD_INLINING%
+                                                       threading=%BOOST_BUILD_THREADING%
 
 :: Calculate the path to the boost-dist repository
 IF EXIST "%~f1" (

@@ -23,12 +23,7 @@ HB_BOOTSTRAP_ANDROID="t:*toonetown/android b:android-ndk
 : ${BOOST_BUILD_SKIPPED_LIBS:="--without-mpi --without-graph_parallel --without-python"}
 : ${BOOST_BUILD_LINK:="static"}
 : ${BOOST_BUILD_THREADING:="multi"}
-: ${BOOST_BUILD_OPTIMIZATION:="space"}
-: ${BOOST_BUILD_INLINING:="on"}
-: ${BOOST_BUILD_OPTIONS:="link=${BOOST_BUILD_LINK}                    \
-                          threading=${BOOST_BUILD_THREADING}          \
-                          optimization=${BOOST_BUILD_OPTIMIZATION}    \
-                          inlining=${BOOST_BUILD_INLINING}"}
+: ${BOOST_BUILD_OPTIONS:="link=${BOOST_BUILD_LINK} threading=${BOOST_BUILD_THREADING}"}
 
 list_arch() {
     if [ -z "${1}" ]; then
