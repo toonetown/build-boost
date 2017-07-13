@@ -19,7 +19,7 @@ HB_BOOTSTRAP_ANDROID="t:*toonetown/android b:android-ndk
 # Options to control the build
 : ${BOOST_BUILD_LOG_LEVEL:=1}
 : ${BOOST_BUILD_PARALLEL:="$(sysctl -n hw.ncpu)"}
-: ${BOOST_BUILD_LAYOUT:="versioned"}
+: ${BOOST_BUILD_LAYOUT:="system"}
 : ${BOOST_BUILD_SKIPPED_LIBS:="--without-mpi --without-graph_parallel --without-python"}
 : ${BOOST_BUILD_LINK:="static"}
 : ${BOOST_BUILD_THREADING:="multi"}
