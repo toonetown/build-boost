@@ -255,7 +255,6 @@ do_package() {
     for a in ${COMBINED_ARCHS}; do
         [ -d "${OBJDIR_ROOT}/objdir-${a}/lib" ] || {
             echo "Architecture ${a} has not been built"
-            echo "${OBJDIR_ROOT}/objdir-${a}/lib"
             return 1
         }
     done
