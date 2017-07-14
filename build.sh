@@ -249,8 +249,7 @@ do_package() {
         exit $?
     }
     
-    BOOST_VER="$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/ *//g')"
-
+    BOOST_VER="$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
     COMBINED_ARCHS="windows.i386 windows.x86_64"
     for p in $(list_plats); do COMBINED_ARCHS="${COMBINED_ARCHS} $(list_arch ${p} | sed -e 's/,//g')"; done    
     for a in ${COMBINED_ARCHS}; do
