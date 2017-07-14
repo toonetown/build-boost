@@ -249,7 +249,7 @@ do_package() {
         exit $?
     }
     
-    BOOST_VER="$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
+    # Make sure everything exists like it should
     COMBINED_ARCHS="windows.i386 windows.x86_64"
     for p in $(list_plats); do COMBINED_ARCHS="${COMBINED_ARCHS} $(list_arch ${p} | sed -e 's/,//g')"; done    
     for a in ${COMBINED_ARCHS}; do
@@ -260,13 +260,14 @@ do_package() {
         }
     done
     
-    BASE="boost-${BOOST_VER}"
-    cp -r "${OBJDIR_ROOT}" "${BASE}" || exit $?
-    rm -f "${BASE}/bjam" || exit $?
-    rm -rf "${BASE}/objdir-"*"/boost" || exit $?
-    rm -rf "${BASE}/objdir-headers" || exit $?
-    find "${BASE}" -name .DS_Store -exec rm {} \; || exit $?
-    tar -zcvpf "${1}/${BASE}.tar.gz" "${BASE}" || exit $?
+    # Build the tarball
+    BASE="boost-$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
+    cp -r "${OBJDIR_ROOT}" "${BASE}" || return $?
+    rm -f "${BASE}/bjam" || return $?
+    rm -rf "${BASE}/objdir-"*"/boost" || return $?
+    rm -rf "${BASE}/objdir-headers" || return $?
+    find "${BASE}" -name .DS_Store -exec rm {} \; || return $?
+    tar -zcvpf "${1}/${BASE}.tar.gz" "${BASE}" || return $?
     rm -rf "${BASE}"
 }
 
