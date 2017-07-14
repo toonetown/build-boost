@@ -12,7 +12,7 @@ HB_BOOTSTRAP_ANDROID="t:*toonetown/android b:android-ndk
 
 # Overridable build locations
 : ${DEFAULT_BOOST_DIST:="${BUILD_DIR}/boost"}
-: ${BOOST_OBJDIR_ROOT:="${BUILD_DIR}/target"}
+: ${OBJDIR_ROOT:="${BUILD_DIR}/target"}
 : ${CONFIGS_DIR:="${BUILD_DIR}/configs"}
 : ${BJAM_BIN:="$(which bjam || echo "${BUILD_DIR}/target/bjam")"}
 
@@ -77,6 +77,12 @@ print_usage() {
     echo "\"${0} bootstrap android\".  Note that this requires an active Internet"          >&2
     echo "connection."                                                                      >&2
     echo ""                                                                                 >&2
+    echo "You can copy the windows outputs to non-windows target directory by running"      >&2
+    echo "\"${0} copy-windows /path/to/windows/target"                                      >&2
+    echo ""                                                                                 >&2
+    echo "You can specify to package the release (after it's already been built) by"        >&2
+    echo "running \"${0} package /path/to/output"                                           >&2
+    echo ""                                                                                 >&2
     return 1
 }
 
@@ -109,9 +115,9 @@ get_bjam() {
     echo -n "${BJAM_BIN} -d${BOOST_BUILD_LOG_LEVEL} -j${BOOST_BUILD_PARALLEL} -q"
     echo -n " --layout=${BOOST_BUILD_LAYOUT}"
     echo -n " --hash"
-    echo -n " --build-dir=\"${BOOST_OBJDIR_ROOT}/objdir-${1}\""
-    echo -n " --stagedir=\"${BOOST_OBJDIR_ROOT}/objdir-${1}\""
-    echo -n " --includedir=\"${BOOST_OBJDIR_ROOT}/include\""
+    echo -n " --build-dir=\"${OBJDIR_ROOT}/objdir-${1}\""
+    echo -n " --stagedir=\"${OBJDIR_ROOT}/objdir-${1}\""
+    echo -n " --includedir=\"${OBJDIR_ROOT}/include\""
     echo -n " ${BOOST_BUILD_SKIPPED_LIBS}"
 }
 
@@ -176,9 +182,9 @@ do_build() {
         
         if [ -n "${LIPO_PATH}" ]; then
             # Set up variables to get our libraries to lipo
-            PLATFORM_DIRS="$(find ${BOOST_OBJDIR_ROOT} -type d -name "objdir-${PLATFORM}.*" -depth 1)"
+            PLATFORM_DIRS="$(find ${OBJDIR_ROOT} -type d -name "objdir-${PLATFORM}.*" -depth 1)"
             PLATFORM_LIBS="$(find ${PLATFORM_DIRS} -type d -name "lib" -depth 1)"
-            FAT_OUTPUT="${BOOST_OBJDIR_ROOT}/objdir-${PLATFORM}/lib"
+            FAT_OUTPUT="${OBJDIR_ROOT}/objdir-${PLATFORM}/lib"
 
             mkdir -p "${FAT_OUTPUT}" || return $?
             for l in $(find ${PLATFORM_LIBS} -type f -name '*.a' -exec basename {} \; | sort -u); do
@@ -197,26 +203,72 @@ do_build() {
 
 do_clean() {
     if [ "${1}" == "all" ]; then
-        echo "Cleaning up all builds (including bootstrapped bjam) in \"${BOOST_OBJDIR_ROOT}\"..."
-        rm -rf "${BOOST_OBJDIR_ROOT}"
+        echo "Cleaning up all builds (including bootstrapped bjam) in \"${OBJDIR_ROOT}\"..."
+        rm -rf "${OBJDIR_ROOT}"
     elif [ -n "${1}" ]; then
-        echo "Cleaning up ${1} builds in \"${BOOST_OBJDIR_ROOT}\"..."
-        rm -rf "${BOOST_OBJDIR_ROOT}/objdir-${1}" "${BOOST_OBJDIR_ROOT}/objdir-${1}."*
+        echo "Cleaning up ${1} builds in \"${OBJDIR_ROOT}\"..."
+        rm -rf "${OBJDIR_ROOT}/objdir-${1}" "${OBJDIR_ROOT}/objdir-${1}."*
     else
-        echo "Cleaning up all builds in \"${BOOST_OBJDIR_ROOT}\"..."
-        rm -rf "${BOOST_OBJDIR_ROOT}/objdir-"*  
+        echo "Cleaning up all builds in \"${OBJDIR_ROOT}\"..."
+        rm -rf "${OBJDIR_ROOT}/objdir-"*  
     fi
     
     # Remove the headers directory if we are cleaning just headers, or everything
     if [ -z "${1}" -o "${1}" == "headers" -o "${1}" == "all" ]; then
-        echo "Cleaning up headers in \"${BOOST_OBJDIR_ROOT}\" and \"${PATH_TO_BOOST_DIST}\"..."
-        rm -rf "${BOOST_OBJDIR_ROOT}/include" "${PATH_TO_BOOST_DIST}/boost"
+        echo "Cleaning up headers in \"${OBJDIR_ROOT}\" and \"${PATH_TO_BOOST_DIST}\"..."
+        rm -rf "${OBJDIR_ROOT}/include" "${PATH_TO_BOOST_DIST}/boost"
     fi
 
-    # Remove some leftovers (project-config.jam and an empty BOOST_OBJDIR_ROOT)
+    # Remove some leftovers (project-config.jam and an empty OBJDIR_ROOT)
     [ -f "${PATH_TO_BOOST_DIST}/project-config.jam" ] && rm -f "${PATH_TO_BOOST_DIST}/project-config.jam"
-    rmdir "${BOOST_OBJDIR_ROOT}" >/dev/null 2>&1
+    rmdir "${OBJDIR_ROOT}" >/dev/null 2>&1
     return 0
+}
+
+do_copy_windows() {
+    [ -d "${1}" ] || {
+        print_usage "Invalid windows target directory:" "    \"${1}\""
+        exit $?
+    }
+    for WIN_PLAT in $(ls "${1}" | grep 'objdir-windows'); do
+        [ -d "${1}/${WIN_PLAT}" -a -d "${1}/${WIN_PLAT}/lib" ] && {
+            echo "Copying ${WIN_PLAT}..."
+            rm -rf "${OBJDIR_ROOT}/${WIN_PLAT}" || exit $?
+            mkdir -p "${OBJDIR_ROOT}/${WIN_PLAT}" || exit $?
+            cp -r "${1}/${WIN_PLAT}/lib" "${OBJDIR_ROOT}/${WIN_PLAT}/lib" || exit $?
+        } || {
+            print_usage "Invalid build target:" "    \"${1}\""
+            exit $?
+        }
+    done
+}
+
+do_package() {
+    [ -d "${1}" ] || {
+        print_usage "Invalid package output directory:" "    \"${1}\""
+        exit $?
+    }
+    
+    BOOST_VER="$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/ *//g')"
+
+    COMBINED_ARCHS="windows.i386 windows.x86_64"
+    for p in $(list_plats); do COMBINED_ARCHS="${COMBINED_ARCHS} $(list_arch ${p} | sed -e 's/,//g')"; done    
+    for a in ${COMBINED_ARCHS}; do
+        [ -d "${OBJDIR_ROOT}/objdir-${a}/lib" ] || {
+            echo "Architecture ${a} has not been built"
+            echo "${OBJDIR_ROOT}/objdir-${a}/lib"
+            return 1
+        }
+    done
+    
+    BASE="boost-${BOOST_VER}"
+    cp -r "${OBJDIR_ROOT}" "${BASE}" || exit $?
+    rm -f "${BASE}/bjam" || exit $?
+    rm -rf "${BASE}/objdir-"*"/boost" || exit $?
+    rm -rf "${BASE}/objdir-headers" || exit $?
+    find "${BASE}" -name .DS_Store -exec rm {} \; || exit $?
+    tar -zcvpf "${1}/${BASE}.tar.gz" "${BASE}" || exit $?
+    rm -rf "${BASE}"
 }
 
 # Calculate the path to the boost-dist repository
@@ -256,6 +308,12 @@ case "${TARGET}" in
         ;;
     "headers")
         do_headers $@
+        ;;
+    "copy-windows")
+        do_copy_windows $@
+        ;;
+    "package")
+        do_package $@
         ;;
     *)
         do_build ${TARGET} $@
