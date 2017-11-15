@@ -9,6 +9,7 @@ cd ->/dev/null
 HB_BOOTSTRAP="b:boost-build"
 HB_BOOTSTRAP_ANDROID="t:*toonetown/android b:android-ndk
                       t:toonetown/extras b:toonetown-extras s:toonetown-extras b:android-env"
+HB_BOOTSTRAP_NATIVE="b:dos2unix"
 
 # Overridable build locations
 : ${DEFAULT_BOOST_DIST:="${BUILD_DIR}/boost"}
@@ -94,6 +95,7 @@ do_bootstrap() {
         curl -sSL "${HB_BOOTSTRAP_GIST_URL}" | /bin/bash -s -- ${HB_BOOTSTRAP_ANDROID}
         return $?
     else
+        curl -sSL "${HB_BOOTSTRAP_GIST_URL}" | /bin/bash -s -- ${HB_BOOTSTRAP_NATIVE} || return $?
         if [ -x "${BJAM_BIN}" ]; then
             echo "Bjam already exists at \"${BJAM_BIN}\""
         else
@@ -258,6 +260,9 @@ do_package() {
             return 1
         }
     done
+	
+	# Fix the include directory headers
+	find "${OBJDIR_ROOT}/include" -type f -exec dos2unix {} \; || return $?
     
     # Build the tarball
     BASE="boost-$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
