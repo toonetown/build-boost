@@ -1,8 +1,8 @@
 #!/bin/bash
 
-GEN_SCRIPT="${CONFIGS_DIR}/common-gcc-android.sh"
-BOOST_BUILD_TOOLSET="${BOOST_BUILD_TOOLSET:=gcc}"
-OPTS="toolset=${BOOST_BUILD_TOOLSET} target-os=linux"
+GEN_SCRIPT="${CONFIGS_DIR}/common-standalone-android.sh"
+BOOST_BUILD_TOOLSET="${BOOST_BUILD_TOOLSET:=clang-android}"
+OPTS="toolset=${BOOST_BUILD_TOOLSET} target-os=android"
 
 OPTS="${OPTS} --without-context --without-coroutine --without-locale define=BOOST_LOG_USE_COMPILER_TLS"
 
@@ -13,6 +13,4 @@ export NO_BZIP2=1
     return 1
 }
 
-ANDROID_GCC_VERSION="${ANDROID_GCC_VERSION:-4.9}"
-ANDROID_PLATFORM="${ANDROID_PLATFORM:-21}"
-CXX_STL_ROOT="${ANDROID_NDK_HOME}/sources/cxx-stl/gnu-libstdc++/${ANDROID_GCC_VERSION}"
+ANDROID_PLATFORM="${ANDROID_PLATFORM:-22}"

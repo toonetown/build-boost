@@ -268,6 +268,7 @@ do_package() {
     BASE="boost-$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
     cp -r "${OBJDIR_ROOT}" "${BASE}" || return $?
     rm -f "${BASE}/bjam" || return $?
+    rm -rf "${BASE}/objdir-"*"/build" || return $?
     rm -rf "${BASE}/objdir-"*"/boost" || return $?
     rm -rf "${BASE}/objdir-headers" || return $?
     find "${BASE}" -name .DS_Store -exec rm {} \; || return $?
