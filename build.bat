@@ -218,7 +218,7 @@ exit /B 0
     @ECHO OFF
     SET CLEAN_HEADERS=no
     IF "%~1"=="all" (
-        echo Cleaning up all builds (including bootstrapped bjam) in "%BOOST_OBJDIR_ROOT%"...
+        echo Cleaning up all builds ^(including bootstrapped bjam^) in "%BOOST_OBJDIR_ROOT%"...
         rmdir /Q /S "%BOOST_OBJDIR_ROOT%" 2>NUL
         SET CLEAN_HEADERS=yes
     ) ELSE IF "%~1"=="" (
