@@ -1,10 +1,10 @@
 ## Boost Building ##
 
-This project provides some prebuilt boost configuration scripts for easy building on various platforms.  It contains as a submodule, the [k9webprotection/boost-releases][boost-releases] fork of the boost project.  
+This project provides some prebuilt boost configuration scripts for easy building on various platforms.  It contains as a submodule, the [toonetown/boostorg-boost][boostorg-boost] fork of the boost project.  
 
-You can check this directory out in any location on your computer, but the default location that the `build.sh` script looks for is as a parent directory to where you check out the [k9webprotection/boost-releases][boost-releases] fork.  By default, this project contains a submodule of the [k9webprotection/boost-releases][boost-releases] fork in the correct location.
+You can check this directory out in any location on your computer, but the default location that the `build.sh` script looks for is as a parent directory to where you check out the [toonetown/boostorg-boost][boostorg-boost] fork.  By default, this project contains a submodule of the [toonetown/boostorg-boost][boostorg-boost] fork in the correct location.
 
-[boost-releases]: https://github.com/k9webprotection/boost-releases
+[boostorg-boost]: https://github.com/toonetown/boostorg-boost
 
 ### Requirements ###
 
