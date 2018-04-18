@@ -130,10 +130,10 @@ do_headers() {
     if [ "${HEADERS_BUILT}" != "yes" ]; then
         cd "${PATH_TO_BOOST_DIST}"
         echo "Building and installing headers..."
-        for i in headers install-proper-headers; do
-            eval "$(get_bjam headers) ${i}" || { cd ->/dev/null; return 1; }
-        done
+        eval "$(get_bjam headers) headers" || { cd ->/dev/null; return 1; }
         cd ->/dev/null
+        mkdir -p "${OBJDIR_ROOT}/include" || return $?
+        cp -r "${PATH_TO_BOOST_DIST}/boost" "${OBJDIR_ROOT}/include" || return $?
         HEADERS_BUILT="yes"
     else
         echo "Headers are already built"
@@ -261,8 +261,8 @@ do_package() {
         }
     done
 	
-	# Fix the include directory headers
-	find "${OBJDIR_ROOT}/include" -type f -exec dos2unix {} \; || return $?
+	  # Fix the include directory headers
+	  find "${OBJDIR_ROOT}/include" -type f -exec dos2unix {} \; || return $?
     
     # Build the tarball
     BASE="boost-$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
