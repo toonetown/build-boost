@@ -8,5 +8,6 @@ using clang-darwin : : ${CLANG_PATH}
     <compileflags>-isysroot <compileflags>${SDK_PATH} <linkflags>-isysroot <linkflags>${SDK_PATH}
     <cxxflags>-std=c++11 <cxxflags>-stdlib=libc++ <linkflags>-stdlib=libc++
     <compileflags>-fPIC <compileflags>-fembed-bitcode
+    <cxxflags>-fvisibility=default
   ;
 EOF
