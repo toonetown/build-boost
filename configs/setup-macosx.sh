@@ -8,4 +8,4 @@ OPTS="toolset=${BOOST_BUILD_TOOLSET} architecture=x86 define=BOOST_LOG_USE_COMPI
 CLANG_PATH="$(xcrun -f clang++)"
 SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
 SDK_VERSION_NAME="macosx"
-MIN_OS_VERSION="${MIN_OS_VERSION:-10.10}"
+MIN_OS_VERSION="${MIN_OS_VERSION:-10.11}"
