@@ -7,7 +7,7 @@ SET SCRIPT_NAME=%~0
 IF "%DEFAULT_BOOST_DIST%"=="" SET DEFAULT_BOOST_DIST=%BUILD_DIR%\boost
 IF "%BOOST_OBJDIR_ROOT%"=="" SET BOOST_OBJDIR_ROOT=%BUILD_DIR%\target
 IF "%CONFIGS_DIR%"=="" SET CONFIGS_DIR=%BUILD_DIR%\configs
-IF "%BJAM_BIN%"=="" SET BJAM_BIN=%BUILD_DIR%\target\bjam.exe
+IF "%B2_BIN%"=="" SET B2_BIN=%BUILD_DIR%\target\b2.exe
 
 :: Version of MSVC to use
 IF "%MSVC_VERSION%"=="" (
@@ -49,10 +49,10 @@ IF "%~1"=="bootstrap" (
     CALL :do_bootstrap & exit /B %ERRORLEVEL%
 )
 
-:: Ensure that BJAM_BIN is valid
-IF NOT EXIST "%BJAM_BIN%" (
-    echo Could not find bjam executable at "%BJAM_BIN%". 1>&2
-    echo Please install (run "%SCRIPT_NAME% bootstrap) or set BJAM_BIN" 1>&2
+:: Ensure that B2_BIN is valid
+IF NOT EXIST "%B2_BIN%" (
+    echo Could not find b2 executable at "%B2_BIN%". 1>&2
+    echo Please install (run "%SCRIPT_NAME% bootstrap) or set B2_BIN" 1>&2
     echo. 1>&2
     GOTO print_usage
 )
@@ -93,7 +93,7 @@ exit /B 0
     echo When specifying clean, you may optionally include an arch to clean, 1>&2
     echo i.e. "%SCRIPT_NAME% clean i386" to clean only the i386 architecture. 1>&2
     echo Specifying "all" to clean will blindly clean everything in the 1>&2
-    echo target directory - including bootstrapped bjam.exe. 1>&2
+    echo target directory - including bootstrapped b2.exe. 1>&2
     echo. 1>&2
 @exit /B 1
 
@@ -109,33 +109,33 @@ exit /B 0
 
 :do_bootstrap
     @ECHO OFF
-    IF NOT EXIST "%BJAM_BIN%" (
-        echo Bootstrapping "%BJAM_BIN%"...
+    IF NOT EXIST "%B2_BIN%" (
+        echo Bootstrapping "%B2_BIN%"...
         PUSHD "%PATH_TO_BOOST_DIST%\tools\build\src\engine"
         CALL build.bat || (
             POPD & exit /B 1
         )
         POPD
         
-        FOR /f "delims=" %%F in ("%BJAM_BIN%") DO @mkdir "%%~dpF" 2>NUL
-        copy "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bin.ntx86\bjam.exe" "%BJAM_BIN%" || exit /B 1
+        FOR /f "delims=" %%F in ("%B2_BIN%") DO @mkdir "%%~dpF" 2>NUL
+        copy "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bin.ntx86\b2.exe" "%B2_BIN%" || exit /B 1
         rmdir /Q /S "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bootstrap" 2>NUL
         rmdir /Q /S "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bin.ntx86" 2>NUL        
     ) else (
-        echo Bjam already exists at "%BJAM_BIN%"
+        echo B2 already exists at "%B2_BIN%"
     )
 @exit /B 0
 
-:get_bjam
+:get_b2
     @ECHO OFF
-    SET BJAM="%BJAM_BIN%" -d%BOOST_BUILD_LOG_LEVEL% -j%BOOST_BUILD_PARALLEL% -q
-    SET BJAM=%BJAM% --layout=%BOOST_BUILD_LAYOUT%
-    SET BJAM=%BJAM% --hash
-    SET BJAM=%BJAM% --build-dir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
-    SET BJAM=%BJAM% --stagedir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
-    SET BJAM=%BJAM% --includedir="%BOOST_OBJDIR_ROOT%\include"
-    SET BJAM=%BJAM% %BOOST_BUILD_SKIPPED_LIBS%
-    SET BJAM=%BJAM% toolset=%BOOST_BUILD_TOOLSET%
+    SET B2="%B2_BIN%" -d%BOOST_BUILD_LOG_LEVEL% -j%BOOST_BUILD_PARALLEL% -q
+    SET B2=%B2% --layout=%BOOST_BUILD_LAYOUT%
+    SET B2=%B2% --hash
+    SET B2=%B2% --build-dir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
+    SET B2=%B2% --stagedir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
+    SET B2=%B2% --includedir="%BOOST_OBJDIR_ROOT%\include"
+    SET B2=%B2% %BOOST_BUILD_SKIPPED_LIBS%
+    SET B2=%B2% toolset=%BOOST_BUILD_TOOLSET%
 @exit /B 0
 
 :do_headers
@@ -151,13 +151,13 @@ exit /B 0
         PUSHD "%PATH_TO_BOOST_DIST%"
         echo Building and installing headers...
 
-        CALL :get_bjam headers || (
+        CALL :get_b2 headers || (
             POPD & exit /B 1
         )
-        !BJAM! headers || (
+        !B2! headers || (
             POPD & exit /B 1
         )
-        !BJAM! install-proper-headers || (
+        !B2! install-proper-headers || (
             POPD & exit /B 1
         )
         POPD
@@ -191,19 +191,19 @@ exit /B 0
         CALL :do_headers || (
             POPD & exit /B 1
         )
-        CALL :get_bjam %BOOST_BUILD_PLATFORM_NAME%.%~1 || (
+        CALL :get_b2 %BOOST_BUILD_PLATFORM_NAME%.%~1 || (
             POPD & exit /B 1
         )
         
         IF "%BOOST_BUILD_LAYOUT%"=="system" (
-            !BJAM! !OPTS! variant=release !BOOST_BUILD_OPTIONS! || (
+            !B2! !OPTS! variant=release !BOOST_BUILD_OPTIONS! || (
                 POPD & exit /B 1
             )        
-            !BJAM! --buildid=dbg !OPTS! variant=debug !BOOST_BUILD_OPTIONS! || (
+            !B2! --buildid=dbg !OPTS! variant=debug !BOOST_BUILD_OPTIONS! || (
                 POPD & exit /B 1
             )                    
         ) ELSE (
-            !BJAM! !OPTS! !BOOST_BUILD_OPTIONS! || (
+            !B2! !OPTS! !BOOST_BUILD_OPTIONS! || (
                 POPD & exit /B 1
             )        
         )
@@ -218,7 +218,7 @@ exit /B 0
     @ECHO OFF
     SET CLEAN_HEADERS=no
     IF "%~1"=="all" (
-        echo Cleaning up all builds ^(including bootstrapped bjam^) in "%BOOST_OBJDIR_ROOT%"...
+        echo Cleaning up all builds ^(including bootstrapped b2^) in "%BOOST_OBJDIR_ROOT%"...
         rmdir /Q /S "%BOOST_OBJDIR_ROOT%" 2>NUL
         SET CLEAN_HEADERS=yes
     ) ELSE IF "%~1"=="" (

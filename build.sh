@@ -15,7 +15,7 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
 : ${DEFAULT_BOOST_DIST:="${BUILD_DIR}/boost"}
 : ${OBJDIR_ROOT:="${BUILD_DIR}/target"}
 : ${CONFIGS_DIR:="${BUILD_DIR}/configs"}
-: ${BJAM_BIN:="$(which bjam || echo "${BUILD_DIR}/target/bjam")"}
+: ${B2_BIN:="$(which b2 || echo "${BUILD_DIR}/target/b2")"}
 
 # Options to control the build
 : ${BOOST_BUILD_LOG_LEVEL:=1}
@@ -67,7 +67,7 @@ print_usage() {
     echo "When specifying clean, you may optionally include a plat or plat.arch to clean,"  >&2
     echo "i.e. \"${0} clean macosx.i386\" to clean only the i386 architecture on Mac OS X"  >&2
     echo "or \"${0} clean ios\" to clean all ios builds.  Specifying \"all\" to clean will" >&2
-    echo "blindly clean everything in the target directory - including bootstrapped bjam."  >&2
+    echo "blindly clean everything in the target directory - including bootstrapped b2."    >&2
     echo ""                                                                                 >&2
     echo "You can specify an optional \"brew\" to bootstrap if you would like to bootstrap" >&2
     echo "a homebrew-based version of boost.build instead of building it locally, i.e. "    >&2
@@ -96,16 +96,16 @@ do_bootstrap() {
         return $?
     else
         curl -sSL "${HB_BOOTSTRAP_GIST_URL}" | /bin/bash -s -- ${HB_BOOTSTRAP_NATIVE} || return $?
-        if [ -x "${BJAM_BIN}" ]; then
-            echo "Bjam already exists at \"${BJAM_BIN}\""
+        if [ -x "${B2_BIN}" ]; then
+            echo "B2 already exists at \"${B2_BIN}\""
         else
-            echo "Bootstrapping \"${BJAM_BIN}\"..."
+            echo "Bootstrapping \"${B2_BIN}\"..."
             cd "${PATH_TO_BOOST_DIST}/tools/build/src/engine"
             ./build.sh || { cd ->/dev/null; return 1; }
             cd ->/dev/null
             
-            mkdir -p "$(dirname "${BJAM_BIN}")"
-            cp "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bin.macosxx86_64/bjam" "${BJAM_BIN}" || return $?
+            mkdir -p "$(dirname "${B2_BIN}")"
+            cp "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bin.macosxx86_64/b2" "${B2_BIN}" || return $?
             rm -rf "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bootstrap"
             rm -rf "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bin.macosxx86_64"
         fi
@@ -113,8 +113,8 @@ do_bootstrap() {
     fi
 }
 
-get_bjam() {
-    echo -n "${BJAM_BIN} -d${BOOST_BUILD_LOG_LEVEL} -j${BOOST_BUILD_PARALLEL} -q"
+get_b2() {
+    echo -n "${B2_BIN} -d${BOOST_BUILD_LOG_LEVEL} -j${BOOST_BUILD_PARALLEL} -q"
     echo -n " --layout=${BOOST_BUILD_LAYOUT}"
     echo -n " --hash"
     echo -n " --build-dir=\"${OBJDIR_ROOT}/objdir-${1}\""
@@ -130,7 +130,7 @@ do_headers() {
     if [ "${HEADERS_BUILT}" != "yes" ]; then
         cd "${PATH_TO_BOOST_DIST}"
         echo "Building and installing headers..."
-        eval "$(get_bjam headers) headers" || { cd ->/dev/null; return 1; }
+        eval "$(get_b2 headers) headers" || { cd ->/dev/null; return 1; }
         cd ->/dev/null
         mkdir -p "${OBJDIR_ROOT}/include" || return $?
         cp -r "${PATH_TO_BOOST_DIST}/boost" "${OBJDIR_ROOT}/include" || return $?
@@ -163,7 +163,7 @@ do_build() {
         source "${CONFIG_SETUP}" && \
             source "${GEN_SCRIPT}" && \
             do_headers && \
-            eval "$(get_bjam ${TARGET}) ${OPTS} ${BOOST_BUILD_OPTIONS} $@"
+            eval "$(get_b2 ${TARGET}) ${OPTS} ${BOOST_BUILD_OPTIONS} $@"
     elif [ -n "${TARGET}" -a -n "$(list_arch ${TARGET})" ]; then
         PLATFORM="${TARGET}"
 
@@ -205,7 +205,7 @@ do_build() {
 
 do_clean() {
     if [ "${1}" == "all" ]; then
-        echo "Cleaning up all builds (including bootstrapped bjam) in \"${OBJDIR_ROOT}\"..."
+        echo "Cleaning up all builds (including bootstrapped b2) in \"${OBJDIR_ROOT}\"..."
         rm -rf "${OBJDIR_ROOT}"
     elif [ -n "${1}" ]; then
         echo "Cleaning up ${1} builds in \"${OBJDIR_ROOT}\"..."
@@ -267,7 +267,7 @@ do_package() {
     # Build the tarball
     BASE="boost-$(grep '^constant BOOST_VERSION' boost/Jamroot | cut -d':' -f2 | sed -e 's/[ ;]*//g')"
     cp -r "${OBJDIR_ROOT}" "${BASE}" || return $?
-    rm -f "${BASE}/bjam" || return $?
+    rm -f "${BASE}/b2" || return $?
     rm -rf "${BASE}/objdir-"*/{build,boost} "${BASE}/logs" || return $?
     rm -rf "${BASE}/objdir-headers" || return $?
     find "${BASE}" -name .DS_Store -exec rm {} \; || return $?
@@ -296,10 +296,10 @@ if [ "${1}" == "bootstrap" ]; then
     exit $?
 fi
 
-# Ensure that BJAM_BIN is valid
-[ -x "${BJAM_BIN}" ] || {
-    print_usage "Could not find bjam executable at '${BJAM_BIN}'." \
-                "Please install (run \"${0} bootstrap\") or set BJAM_BIN."
+# Ensure that B2_BIN is valid
+[ -x "${B2_BIN}" ] || {
+    print_usage "Could not find b2 executable at '${B2_BIN}'." \
+                "Please install (run \"${0} bootstrap\") or set B2_BIN."
     exit $?
 }
 
