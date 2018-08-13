@@ -21,7 +21,7 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
 : ${BOOST_BUILD_LOG_LEVEL:=1}
 : ${BOOST_BUILD_PARALLEL:="$(sysctl -n hw.ncpu)"}
 : ${BOOST_BUILD_LAYOUT:="system"}
-: ${BOOST_BUILD_SKIPPED_LIBS:="--without-mpi --without-graph_parallel --without-python"}
+: ${BOOST_BUILD_SKIPPED_LIBS:="--without-mpi --without-graph_parallel --without-python --without-coroutine"}
 : ${BOOST_BUILD_LINK:="static"}
 : ${BOOST_BUILD_THREADING:="multi"}
 : ${BOOST_BUILD_OPTIONS:="link=${BOOST_BUILD_LINK} threading=${BOOST_BUILD_THREADING}"}

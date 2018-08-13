@@ -22,7 +22,10 @@ IF "%MSVC_VERSION%"=="" (
 IF "%BOOST_BUILD_LOG_LEVEL%"=="" SET BOOST_BUILD_LOG_LEVEL=1
 IF "%BOOST_BUILD_PARALLEL%"=="" SET BOOST_BUILD_PARALLEL=%NUMBER_OF_PROCESSORS%
 IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=system
-IF "%BOOST_BUILD_SKIPPED_LIBS%"=="" SET BOOST_BUILD_SKIPPED_LIBS=--without-mpi --without-graph_parallel --without-python
+IF "%BOOST_BUILD_SKIPPED_LIBS%"=="" SET BOOST_BUILD_SKIPPED_LIBS=--without-mpi ^
+                                                                 --without-graph_parallel ^
+                                                                 --without-python ^
+                                                                 --without-coroutine
 IF "%BOOST_BUILD_LINK%"=="" SET BOOST_BUILD_LINK=static
 IF "%BOOST_BUILD_RUNTIME_LINK%"=="" SET BOOST_BUILD_RUNTIME_LINK=static
 IF "%BOOST_BUILD_THREADING%"=="" SET BOOST_BUILD_THREADING=multi
