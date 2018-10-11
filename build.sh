@@ -17,6 +17,9 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
 : ${CONFIGS_DIR:="${BUILD_DIR}/configs"}
 : ${B2_BIN:="$(which b2 || echo "${BUILD_DIR}/target/b2")"}
 
+# Packages to bundle
+: ${PKG_COMBINED_ARCHS:="windows.i386 windows.x86_64 macosx.x86_64"}
+
 # Options to control the build
 : ${BOOST_BUILD_LOG_LEVEL:=1}
 : ${BOOST_BUILD_PARALLEL:="$(sysctl -n hw.ncpu)"}
@@ -263,8 +266,11 @@ do_package() {
     }
     
     # Make sure everything exists like it should
-    COMBINED_ARCHS="windows.i386 windows.x86_64"
-    for p in $(list_plats); do COMBINED_ARCHS="${COMBINED_ARCHS} $(list_arch ${p} | sed -e 's/,//g')"; done    
+    COMBINED_ARCHS="${PKG_COMBINED_ARCHS}"
+    [ -n "${COMBINED_ARCHS}" ] || {
+      COMBINED_ARCHS="windows.i386 windows.x86_64"
+      for p in $(list_plats); do COMBINED_ARCHS="${COMBINED_ARCHS} $(list_arch ${p} | sed -e 's/,//g')"; done
+    }
     for a in ${COMBINED_ARCHS}; do
         [ -d "${OBJDIR_ROOT}/objdir-${a}/lib" ] || {
             echo "Architecture ${a} has not been built"
