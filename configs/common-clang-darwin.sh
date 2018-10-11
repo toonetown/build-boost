@@ -6,7 +6,7 @@ using clang-darwin : : ${CLANG_PATH}
     <compileflags>-m${SDK_VERSION_NAME}-version-min=${MIN_OS_VERSION}
     <linkflags>-m${SDK_VERSION_NAME}-version-min=${MIN_OS_VERSION}
     <compileflags>-isysroot <compileflags>${SDK_PATH} <linkflags>-isysroot <linkflags>${SDK_PATH}
-    <cxxflags>-std=c++11 <cxxflags>-stdlib=libc++ <linkflags>-stdlib=libc++
+    <cxxflags>-std=c++17 <cxxflags>-stdlib=libc++ <linkflags>-stdlib=libc++
     <compileflags>-fPIC <compileflags>-fembed-bitcode
     <cxxflags>-fvisibility=default
   ;
