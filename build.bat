@@ -22,10 +22,18 @@ IF "%MSVC_VERSION%"=="" (
 IF "%BOOST_BUILD_LOG_LEVEL%"=="" SET BOOST_BUILD_LOG_LEVEL=1
 IF "%BOOST_BUILD_PARALLEL%"=="" SET BOOST_BUILD_PARALLEL=%NUMBER_OF_PROCESSORS%
 IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=system
-IF "%BOOST_BUILD_SKIPPED_LIBS%"=="" SET BOOST_BUILD_SKIPPED_LIBS=--without-mpi ^
-                                                                 --without-graph_parallel ^
-                                                                 --without-python ^
-                                                                 --without-coroutine
+IF "%BOOST_BUILD_LIBS%"=="" SET BOOST_BUILD_LIBS=--with-atomic ^
+                                                 --with-chrono ^
+                                                 --with-date_time ^
+                                                 --with-filesystem ^
+                                                 --with-iostreams ^
+                                                 --with-log define=BOOST_LOG_USE_STD_REGEX ^
+                                                 --with-program_options ^
+                                                 --with-serialization ^
+                                                 --with-system ^
+                                                 --with-test ^
+                                                 --with-thread ^
+                                                 --with-timer
 IF "%BOOST_BUILD_LINK%"=="" SET BOOST_BUILD_LINK=static
 IF "%BOOST_BUILD_RUNTIME_LINK%"=="" SET BOOST_BUILD_RUNTIME_LINK=static
 IF "%BOOST_BUILD_THREADING%"=="" SET BOOST_BUILD_THREADING=multi
@@ -137,7 +145,7 @@ exit /B 0
     SET B2=%B2% --build-dir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
     SET B2=%B2% --stagedir="%BOOST_OBJDIR_ROOT%\objdir-%~1"
     SET B2=%B2% --includedir="%BOOST_OBJDIR_ROOT%\include"
-    SET B2=%B2% %BOOST_BUILD_SKIPPED_LIBS%
+    SET B2=%B2% %BOOST_BUILD_LIBS%
     SET B2=%B2% toolset=%BOOST_BUILD_TOOLSET%
 @exit /B 0
 

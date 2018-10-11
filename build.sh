@@ -21,7 +21,18 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
 : ${BOOST_BUILD_LOG_LEVEL:=1}
 : ${BOOST_BUILD_PARALLEL:="$(sysctl -n hw.ncpu)"}
 : ${BOOST_BUILD_LAYOUT:="system"}
-: ${BOOST_BUILD_SKIPPED_LIBS:="--without-mpi --without-graph_parallel --without-python --without-coroutine"}
+: ${BOOST_BUILD_LIBS:="--with-atomic \
+                       --with-chrono \
+                       --with-date_time \
+                       --with-filesystem \
+                       --with-iostreams \
+                       --with-log define=BOOST_LOG_USE_STD_REGEX \
+                       --with-program_options \
+                       --with-serialization \
+                       --with-system \
+                       --with-test \
+                       --with-thread \
+                       --with-timer"}
 : ${BOOST_BUILD_LINK:="static"}
 : ${BOOST_BUILD_THREADING:="multi"}
 : ${BOOST_BUILD_OPTIONS:="link=${BOOST_BUILD_LINK} threading=${BOOST_BUILD_THREADING}"}
@@ -120,7 +131,7 @@ get_b2() {
     echo -n " --build-dir=\"${OBJDIR_ROOT}/objdir-${1}\""
     echo -n " --stagedir=\"${OBJDIR_ROOT}/objdir-${1}\""
     echo -n " --includedir=\"${OBJDIR_ROOT}/include\""
-    echo -n " ${BOOST_BUILD_SKIPPED_LIBS}"
+    echo -n " ${BOOST_BUILD_LIBS}"
 }
 
 do_headers() {
