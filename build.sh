@@ -287,6 +287,7 @@ do_package() {
     rm -f "${BASE}/b2" || return $?
     rm -rf "${BASE}/objdir-"*/{build,boost} "${BASE}/logs" || return $?
     rm -rf "${BASE}/objdir-headers" || return $?
+    rm -rf "${BASE}/objdir-macosx.x86_64" || return $?
     find "${BASE}" -name .DS_Store -exec rm {} \; || return $?
     tar -zcvpf "${1}/${BASE}.tar.gz" "${BASE}" || return $?
     rm -rf "${BASE}"
