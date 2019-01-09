@@ -32,7 +32,6 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
                        --with-log define=BOOST_LOG_USE_STD_REGEX \
                        --with-program_options \
                        --with-serialization \
-                       --with-system \
                        --with-test \
                        --with-thread \
                        --with-timer"}
