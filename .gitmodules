@@ -1,3 +1,3 @@
 [submodule "boost"]
 	path = boost
-	url=https://github.com/toonetown/boostorg-boost.git
+	url=../boostorg-boost.git

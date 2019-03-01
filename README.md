@@ -1,8 +1,8 @@
 ## Boost Building ##
 
-This project provides some prebuilt boost configuration scripts for easy building on various platforms.  It contains as a submodule, the [toonetown/boostorg-boost][boostorg-boost] fork of the boost project.  
+This project provides some prebuilt boost configuration scripts for easy building on various platforms.  It contains as a submodule, the [boostorg-boost][boostorg-boost] fork of the boost project.  
 
-You can check this directory out in any location on your computer, but the default location that the `build.sh` script looks for is as a parent directory to where you check out the [toonetown/boostorg-boost][boostorg-boost] fork.  By default, this project contains a submodule of the [toonetown/boostorg-boost][boostorg-boost] fork in the correct location.
+You can check this directory out in any location on your computer, but the default location that the `build.sh` script looks for is as a parent directory to where you check out the [boostorg-boost][boostorg-boost] fork.  By default, this project contains a submodule of the [boostorg-boost][boostorg-boost] fork in the correct location.
 
 [boostorg-boost]: https://github.com/toonetown/boostorg-boost
 
