@@ -167,9 +167,6 @@ exit /B 0
         !B2! headers || (
             POPD & exit /B 1
         )
-        !B2! install-proper-headers || (
-            POPD & exit /B 1
-        )
         POPD
         SET HEADERS_BUILT=yes
     )
