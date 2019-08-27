@@ -118,9 +118,7 @@ do_bootstrap() {
             cd ->/dev/null
             
             mkdir -p "$(dirname "${B2_BIN}")"
-            cp "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bin.macosxx86_64/b2" "${B2_BIN}" || return $?
-            rm -rf "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bootstrap"
-            rm -rf "${PATH_TO_BOOST_DIST}/tools/build/src/engine/bin.macosxx86_64"
+            cp "${PATH_TO_BOOST_DIST}/tools/build/src/engine/b2" "${B2_BIN}" || return $?
         fi
         return 0
     fi

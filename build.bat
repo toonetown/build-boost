@@ -128,9 +128,7 @@ exit /B 0
         POPD
         
         FOR /f "delims=" %%F in ("%B2_BIN%") DO @mkdir "%%~dpF" 2>NUL
-        copy "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bin.ntx86\b2.exe" "%B2_BIN%" || exit /B 1
-        rmdir /Q /S "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bootstrap" 2>NUL
-        rmdir /Q /S "%PATH_TO_BOOST_DIST%\tools\build\src\engine\bin.ntx86" 2>NUL        
+        copy "%PATH_TO_BOOST_DIST%\tools\build\src\engine\b2.exe" "%B2_BIN%" || exit /B 1
     ) else (
         echo B2 already exists at "%B2_BIN%"
     )
