@@ -283,6 +283,7 @@ do_package() {
     rm -f "${BASE}/objdir-"*"/lib/libboost_chrono"* || return $?
     rm -f "${BASE}/objdir-"*"/lib/libboost_date_time"* || return $?
     rm -f "${BASE}/objdir-"*"/lib/libboost_system"* || return $?
+    rm -f "${BASE}/objdir-"*"/lib/cmake" || return $?
     find "${BASE}" -name .DS_Store -exec rm {} \; || return $?
     tar -zcvpf "${1}/${BASE}.tar.gz" "${BASE}" || return $?
     rm -rf "${BASE}"
