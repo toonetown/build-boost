@@ -26,7 +26,6 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
 : ${BOOST_BUILD_LAYOUT:="system"}
 : ${BOOST_BUILD_LIBS:="--with-atomic \
                        --with-chrono \
-                       --with-date_time \
                        --with-filesystem \
                        --with-iostreams \
                        --with-log define=BOOST_LOG_USE_STD_REGEX \

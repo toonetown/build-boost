@@ -24,7 +24,6 @@ IF "%BOOST_BUILD_PARALLEL%"=="" SET BOOST_BUILD_PARALLEL=%NUMBER_OF_PROCESSORS%
 IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=system
 IF "%BOOST_BUILD_LIBS%"=="" SET BOOST_BUILD_LIBS=--with-atomic ^
                                                  --with-chrono ^
-                                                 --with-date_time ^
                                                  --with-filesystem ^
                                                  --with-iostreams ^
                                                  --with-log define=BOOST_LOG_USE_STD_REGEX ^
