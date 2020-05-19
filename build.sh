@@ -24,16 +24,11 @@ HB_BOOTSTRAP_NATIVE="b:dos2unix"
 : ${BOOST_BUILD_LOG_LEVEL:=1}
 : ${BOOST_BUILD_PARALLEL:="$(sysctl -n hw.ncpu)"}
 : ${BOOST_BUILD_LAYOUT:="system"}
-: ${BOOST_BUILD_LIBS:="--with-atomic \
-                       --with-chrono \
-                       --with-filesystem \
-                       --with-iostreams \
+: ${BOOST_BUILD_LIBS:="--with-filesystem \
                        --with-log define=BOOST_LOG_USE_STD_REGEX \
                        --with-program_options \
-                       --with-serialization \
                        --with-test \
-                       --with-thread \
-                       --with-timer"}
+                       --with-thread"}
 : ${BOOST_BUILD_LINK:="static"}
 : ${BOOST_BUILD_THREADING:="multi"}
 : ${BOOST_BUILD_OPTIONS:="link=${BOOST_BUILD_LINK} threading=${BOOST_BUILD_THREADING}"}

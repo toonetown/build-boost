@@ -22,16 +22,11 @@ IF "%MSVC_VERSION%"=="" (
 IF "%BOOST_BUILD_LOG_LEVEL%"=="" SET BOOST_BUILD_LOG_LEVEL=1
 IF "%BOOST_BUILD_PARALLEL%"=="" SET BOOST_BUILD_PARALLEL=%NUMBER_OF_PROCESSORS%
 IF "%BOOST_BUILD_LAYOUT%"=="" SET BOOST_BUILD_LAYOUT=system
-IF "%BOOST_BUILD_LIBS%"=="" SET BOOST_BUILD_LIBS=--with-atomic ^
-                                                 --with-chrono ^
-                                                 --with-filesystem ^
-                                                 --with-iostreams ^
+IF "%BOOST_BUILD_LIBS%"=="" SET BOOST_BUILD_LIBS=--with-filesystem ^
                                                  --with-log define=BOOST_LOG_USE_STD_REGEX ^
                                                  --with-program_options ^
-                                                 --with-serialization ^
                                                  --with-test ^
-                                                 --with-thread ^
-                                                 --with-timer
+                                                 --with-thread
 IF "%BOOST_BUILD_LINK%"=="" SET BOOST_BUILD_LINK=static
 IF "%BOOST_BUILD_RUNTIME_LINK%"=="" SET BOOST_BUILD_RUNTIME_LINK=static
 IF "%BOOST_BUILD_THREADING%"=="" SET BOOST_BUILD_THREADING=multi
